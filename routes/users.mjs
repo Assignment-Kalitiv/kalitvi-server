@@ -10,6 +10,7 @@ export const usersRoute = express.Router()
 //CRUD Operations
 // Get all
 usersRoute.get('', async (req, res) => {
+    console.log(req.cookies.token);
     const data = await service.getUsers(req.body);
     res.send(data);
 })

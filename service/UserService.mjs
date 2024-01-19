@@ -27,7 +27,9 @@ export default class UserService {
         // const sql = "SELECT * FROM users";
         // const [res,] = await this.#connection.execute(sql);
         // return res;
-        return await this.#db.getAll();
+        const users = await this.#db.getAll();
+        users.forEach(user => delete user.password);
+        return users
     }
 
     async deleteUser(id) {
