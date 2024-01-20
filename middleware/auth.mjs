@@ -1,10 +1,8 @@
 import jwt from 'jsonwebtoken';
-const BEARER = 'Bearer ';
 
 const auth = (req, res, next) => {
-    const authHeader = req.header("Authorization");
-    if (authHeader && authHeader.startsWith(BEARER)) {
-        const accessToken = authHeader.substring(BEARER.length);
+    const accessToken = req.cookies.token
+    if (accessToken) {
         const secret = 'test-secret'; // TODO
         try {
             const payload = jwt.verify(accessToken, secret);

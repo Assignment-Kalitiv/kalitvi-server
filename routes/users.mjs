@@ -1,5 +1,3 @@
-// import auth from '../middleware/auth.mjs';
-// import UserService from '../service/UserService.mjs'
 import express from 'express'
 import { service } from '../service.mjs';
 import asyncHandler from 'express-async-handler'
@@ -10,7 +8,6 @@ export const usersRoute = express.Router()
 //CRUD Operations
 // Get all
 usersRoute.get('', async (req, res) => {
-    console.log(req.cookies.token);
     const data = await service.getUsers(req.body);
     res.send(data);
 })

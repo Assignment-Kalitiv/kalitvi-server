@@ -5,14 +5,7 @@ export default class SQLConnection {
     #connection;
 
     constructor(host, user, password, database) {
-        mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "admin1234",
-            database: "userdb"
-        }).then(res => {
-            this.#connection = res;
-        })
+        mysql.createConnection({ host, user, password, database }).then(res => this.#connection = res)
     }
 
     async getAll() {
