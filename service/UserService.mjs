@@ -4,7 +4,6 @@ import SQLConnection from '../domain/SQLConnection.mjs';
 
 export default class UserService {
 
-    // #connection;
     #db;
 
     constructor() {
@@ -54,7 +53,7 @@ export default class UserService {
         if (account && await bcrypt.compare(userData.password, account.password)) {
             accessToken = this.#getJwt(account.email, account.id);
         }
-        return { accessToken, email, id: account.id };
+        return { accessToken, email, id: account?.id };
     }
 
     #getJwt(email, id) {

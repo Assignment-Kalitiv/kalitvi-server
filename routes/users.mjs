@@ -1,25 +1,24 @@
 import express from 'express'
-import { service } from '../service.mjs';
 import asyncHandler from 'express-async-handler'
+import { service } from '../service.mjs';
 import { throwError } from '../utils/util.js';
 
 export const usersRoute = express.Router()
 
-//CRUD Operations
-// Get all
 usersRoute.get('', async (req, res) => {
     const data = await service.getUsers(req.body);
     res.send(data);
 })
 
-// Delete
 usersRoute.delete('/:id', asyncHandler(async (req, res) => {
     const id = req.params.id;
+    console.log(id, req.user);
     if (+id != +req.user.id) {
         throwError(res, 403, `You can only delete yourself`)
     } else {
         const data = await service.deleteUser(id);
         if (data) {
+            res.clearCookie('token')
             res.status(200).send(`User [${id}] deleted`);
         } else {
             throwError(res, 404, `User [${id}] not found`)
@@ -27,7 +26,6 @@ usersRoute.delete('/:id', asyncHandler(async (req, res) => {
     }
 }))
 
-// Update
 usersRoute.put('/:id', asyncHandler(async (req, res) => {
     const id = req.params.id;
     if (+id != +req.user.id) {
@@ -44,7 +42,6 @@ usersRoute.put('/:id', asyncHandler(async (req, res) => {
     }
 }))
 
-// Read
 usersRoute.get('/:id', async (req, res) => {
     const id = req.params.id;
     const data = await service.getUser(id);

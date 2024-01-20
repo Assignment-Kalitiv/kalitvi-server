@@ -15,7 +15,6 @@ app.use(cookieParser())
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 app.use(bodyParser.json())
 
-//User Login
 app.post('/api/login', asyncHandler(async (req, res) => {
     const { accessToken, email, id } = await service.login(req.body);
     if (!accessToken) {
@@ -26,14 +25,19 @@ app.post('/api/login', asyncHandler(async (req, res) => {
     }
 }))
 
-//User Registration
 app.post('/api/register', asyncHandler(async (req, res) => {
     const { accessToken, email, id } = await service.addAccount(req.body)
     if (accessToken == null) {
         throwError(res, 400, `account ${req.body.email} already exists`)
+    } else {
+        res.cookie('token', accessToken, { httpOnly: true })
+        res.status(200).send({ id, email });
     }
-    res.cookie('token', accessToken, { httpOnly: true })
-    res.status(200).send({ id, email });
+}))
+
+app.post('/api/logout', asyncHandler(async (req, res) => {
+    res.clearCookie('token')
+    res.status(200).send('cookie deleted')
 }))
 
 app.use(auth)

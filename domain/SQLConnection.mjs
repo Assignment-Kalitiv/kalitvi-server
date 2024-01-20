@@ -5,7 +5,9 @@ export default class SQLConnection {
     #connection;
 
     constructor(host, user, password, database) {
-        mysql.createConnection({ host, user, password, database }).then(res => this.#connection = res)
+        mysql.createConnection({ host, user, password, database }).then(res => {
+            this.#connection = res;
+        })
     }
 
     async getAll() {
@@ -29,6 +31,7 @@ export default class SQLConnection {
     async addOne(firstname, lastname, email, passwordHash) {
         const sql = "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)";
         const [res,] = await this.#connection.execute(sql, [firstname, lastname, email, passwordHash]);
+        console.log(res.insertId);
         return res.insertId;
     }
 
@@ -43,6 +46,7 @@ export default class SQLConnection {
             sql = "SELECT * FROM users where id = (?)"
         }
         const [response,] = await this.#connection.execute(sql, [type]);
+        console.log(response);
         return response[0];
     }
 }
