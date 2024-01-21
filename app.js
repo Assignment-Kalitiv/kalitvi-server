@@ -5,14 +5,15 @@ import errorHandler from './middleware/errorHandler.mjs';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import auth from './middleware/auth.mjs';
+import dotenv from 'dotenv/config'
 import { service } from './service.mjs';
 import { usersRoute } from './routes/users.mjs';
 import { throwError } from './utils/util.js';
 
-const port = process.env.PORT || 4000
+const port = process.env.SERVER_PORT || 4000
 const app = express();
 app.use(cookieParser())
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
+app.use(cors({ credentials: true, origin: `http://localhost:${process.env.CLIENT_PORT}` }))
 app.use(bodyParser.json())
 
 app.post('/api/login', asyncHandler(async (req, res) => {
@@ -20,7 +21,7 @@ app.post('/api/login', asyncHandler(async (req, res) => {
     if (!accessToken) {
         throwError(res, 400, "Wrong credentials")
     } else {
-        res.cookie('token', accessToken, { httpOnly: true })
+        res.cookie(process.env.TOKEN_NAME, accessToken, { httpOnly: true })
         res.status(200).send({ id, email })
     }
 }))
@@ -30,13 +31,13 @@ app.post('/api/register', asyncHandler(async (req, res) => {
     if (accessToken == null) {
         throwError(res, 400, `account ${req.body.email} already exists`)
     } else {
-        res.cookie('token', accessToken, { httpOnly: true })
+        res.cookie(process.env.TOKEN_NAME, accessToken, { httpOnly: true })
         res.status(200).send({ id, email });
     }
 }))
 
 app.post('/api/logout', asyncHandler(async (req, res) => {
-    res.clearCookie('token')
+    res.clearCookie(process.env.TOKEN_NAME)
     res.status(200).send('cookie deleted')
 }))
 

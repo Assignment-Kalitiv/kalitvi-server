@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 const auth = (req, res, next) => {
     const accessToken = req.cookies.token
     if (accessToken) {
-        const secret = 'test-secret'; // TODO
+        const secret = process.env.SECRET_KEY
         try {
             const payload = jwt.verify(accessToken, secret);
             req.user = { email: payload.email, id: payload.id }

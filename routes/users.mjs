@@ -12,13 +12,12 @@ usersRoute.get('', async (req, res) => {
 
 usersRoute.delete('/:id', asyncHandler(async (req, res) => {
     const id = req.params.id;
-    console.log(id, req.user);
     if (+id != +req.user.id) {
         throwError(res, 403, `You can only delete yourself`)
     } else {
         const data = await service.deleteUser(id);
         if (data) {
-            res.clearCookie('token')
+            res.clearCookie(process.env.TOKEN_NAME)
             res.status(200).send(`User [${id}] deleted`);
         } else {
             throwError(res, 404, `User [${id}] not found`)

@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise'
+import jsonData from '../config/requests.json' assert { type: "json" };
 
 export default class SQLConnection {
 
@@ -11,27 +12,26 @@ export default class SQLConnection {
     }
 
     async getAll() {
-        const sql = "SELECT * FROM users";
+        const sql = jsonData.getAll;
         const [res,] = await this.#connection.execute(sql);
         return res;
     }
 
     async deleteOne(id) {
-        const sql = "DELETE FROM users WHERE id = ?";
+        const sql = jsonData.deleteOne
         const [res,] = await this.#connection.execute(sql, [id])
         return +res.affectedRows > 0;
     }
 
     async updateOne(firstname, lastname, id) {
-        const sql = "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?";
+        const sql = jsonData.updateOne
         const [res,] = await this.#connection.execute(sql, [firstname, lastname, id]);
         return +res.affectedRows > 0;
     }
 
     async addOne(firstname, lastname, email, passwordHash) {
-        const sql = "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)";
+        const sql = jsonData.addOne
         const [res,] = await this.#connection.execute(sql, [firstname, lastname, email, passwordHash]);
-        console.log(res.insertId);
         return res.insertId;
     }
 
@@ -40,13 +40,12 @@ export default class SQLConnection {
         let type;
         if (data.email) {
             type = data.email;
-            sql = "SELECT * FROM users where email = (?)"
+            sql = jsonData.getOneByEmail
         } else {
             type = data.id;
-            sql = "SELECT * FROM users where id = (?)"
+            sql = jsonData.getOneById
         }
         const [response,] = await this.#connection.execute(sql, [type]);
-        console.log(response);
         return response[0];
     }
 }

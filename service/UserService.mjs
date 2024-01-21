@@ -7,7 +7,7 @@ export default class UserService {
     #db;
 
     constructor() {
-        this.#db = new SQLConnection("localhost", "root", "admin1234", "userdb");
+        this.#db = new SQLConnection(process.env.SQL_HOST, process.env.SQL_USER, process.env.SQL_PASSWORD, process.env.SQL_DATABASE);
     }
 
     async getUsers() {
@@ -61,7 +61,7 @@ export default class UserService {
             email,
             id
         }
-        const secret = 'test-secret'; //TODO перенести в переменную среды
+        const secret = process.env.SECRET_KEY
         return jwt.sign(payload, secret);
     }
 }

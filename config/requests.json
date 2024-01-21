@@ -1,0 +1,8 @@
+{
+    "getAll": "SELECT * FROM users",
+    "deleteOne": "DELETE FROM users WHERE id = ?",
+    "updateOne": "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?",
+    "getOneByEmail": "SELECT * FROM users where email = (?)",
+    "getOneById": "SELECT * FROM users where id = (?)",
+    "addOne": "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)"
+}
