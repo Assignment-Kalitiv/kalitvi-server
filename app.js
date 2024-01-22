@@ -1,11 +1,13 @@
 import express from 'express'
 import bodyParser from 'body-parser';
 import asyncHandler from 'express-async-handler'
-import errorHandler from './middleware/errorHandler.mjs';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
-import auth from './middleware/auth.mjs';
 import dotenv from 'dotenv/config'
+import Joi from 'joi'
+import errorHandler from './middleware/errorHandler.mjs';
+import auth from './middleware/auth.mjs';
+import validate from './middleware/validate.mjs';
 import { service } from './service.mjs';
 import { usersRoute } from './routes/users.mjs';
 import { throwError } from './utils/util.js';
@@ -26,7 +28,7 @@ app.post('/api/login', asyncHandler(async (req, res) => {
     }
 }))
 
-app.post('/api/register', asyncHandler(async (req, res) => {
+app.post('/api/register', validate, asyncHandler(async (req, res) => {
     const { accessToken, email, id } = await service.addAccount(req.body)
     if (accessToken == null) {
         throwError(res, 400, `account ${req.body.email} already exists`)
