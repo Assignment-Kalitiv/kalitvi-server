@@ -1,6 +1,6 @@
 import express from 'express'
 import asyncHandler from 'express-async-handler'
-import { service } from '../service.mjs';
+import { service } from '../service/service.mjs';
 import { throwError } from '../utils/util.js';
 
 export const usersRoute = express.Router()

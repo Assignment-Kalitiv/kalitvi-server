@@ -1,13 +1,12 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import SQLConnection from '../domain/SQLConnection.mjs';
 
 export default class UserService {
 
     #db;
 
-    constructor() {
-        this.#db = new SQLConnection(process.env.SQL_HOST, process.env.SQL_USER, process.env.SQL_PASSWORD, process.env.SQL_DATABASE);
+    constructor(connection) {
+        this.#db = connection
     }
 
     async getUsers() {

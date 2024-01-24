@@ -8,7 +8,7 @@ import Joi from 'joi'
 import errorHandler from './middleware/errorHandler.mjs';
 import auth from './middleware/auth.mjs';
 import validate from './middleware/validate.mjs';
-import { service } from './service.mjs';
+import { service } from './service/service.mjs';
 import { usersRoute } from './routes/users.mjs';
 import { throwError } from './utils/util.js';
 
